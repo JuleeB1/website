@@ -132,31 +132,18 @@ Session Affinity:       None
 Events:                 <none>
 ```
 
-Note the 'LoadBalancer Ingress' addresses of your Federated Service
-correspond with the 'LoadBalancer Ingress' addresses of all of the
-underlying Kubernetes services (once these have been allocated - this
-may take a few seconds). For inter-cluster and inter-cloud-provider
-networking between service shards to work correctly, your services
-need to have an externally visible IP address. [Service Type:
-Loadbalancer](/docs/concepts/services-networking/service/#loadbalancer)
-is typically used for this, although other options
-(e.g. [External IP's](/docs/concepts/services-networking/service/#external-ips)) exist.
-
-Note also that we have not yet provisioned any backend Pods to receive
-the network traffic directed to these addresses (i.e. 'Service
-Endpoints'), so the Federated Service does not yet consider these to
-be healthy service shards, and has accordingly not yet added their
-addresses to the DNS records for this Federated Service (more on this
-aspect later).
+{{< note >}}
+**Note:** Your Federated Service 'LoadBalancer Ingress' addresses correspond with the 'LoadBalancer Ingress' addresses of all of the
+underlying Kubernetes services (after these are allocated - this may take a few seconds). For inter-cluster and inter-cloud-provider
+networking between service shards to work correctly, your services must have an externally visible IP address. [Service Type:
+Loadbalancer](/docs/concepts/services-networking/service/#loadbalancer) is typically used for this, although other options
+(such as [External IP's](/docs/concepts/services-networking/service/#external-ips)) exist. 
+We have not yet provisioned any backend Pods to receive the network traffic directed to these addresses ('Service Endpoints'). As a result, the Federated Service does not yet consider these to be healthy service shards and, accordingly, has not yet added their addresses to the DNS records for this Federated Service (more on this aspect later).
+{{< /note >}}
 
 ## Adding backend pods
 
-To render the underlying service shards healthy, we need to add
-backend Pods behind them. This is currently done directly against the
-API endpoints of the underlying clusters (although in future the
-Federation server will be able to do all this for you with a single
-command, to save you the trouble). For example, to create backend Pods
-in 13 underlying clusters:
+To render the underlying service shards healthy, we need to add backend Pods behind them. This is currently done directly against the API endpoints of the underlying clusters (although in future the Federation server will be able to do all this for you with a single command, to save you the trouble). For example, to create backend Pods in 13 underlying clusters:
 
 ``` shell
 for CLUSTER in asia-east1-c asia-east1-a asia-east1-b \
@@ -168,7 +155,9 @@ do
 done
 ```
 
-Note that `kubectl run` automatically adds the `run=nginx` labels required to associate the backend pods with their services.
+{{< note >}}
+**Note:** `kubectl run` automatically adds the `run=nginx` labels required to associate backend pods with their services.
+{{< /note >}}
 
 ## Verifying public DNS records
 
@@ -217,7 +206,8 @@ nginx.mynamespace.myfederation.svc.europe-west1-d.example.com.  CNAME     180   
 ... etc.
 ```
 
-Note: If your Federation is configured to use AWS Route53, you can use one of the equivalent AWS tools, for example:
+{{< note >}}
+**Note:** If your Federation is configured to use AWS Route53, you can use one of the equivalent AWS tools. For example:
 
 ``` shell
 $ aws route53 list-hosted-zones
@@ -227,14 +217,14 @@ and
 ``` shell
 $ aws route53 list-resource-record-sets --hosted-zone-id Z3ECL0L9QLOVBX
 ```
+{{< /note >}}
 
 Whatever DNS provider you use, any DNS query tool (for example 'dig'
 or 'nslookup') will of course also allow you to see the records
-created by the Federation for you. Note that you should either point
-these tools directly at your DNS provider (e.g. `dig
-@ns-cloud-e1.googledomains.com...`) or expect delays in the order of
-your configured TTL (180 seconds, by default) before seeing updates,
-due to caching by intermediate DNS servers.
+created by the Federation for you. 
+{{< note >}}
+**Note:** Due to intermediate DNS server caching, you should either point these tools directly at your DNS provider (such as `dig @ns-cloud-e1.googledomains.com...`) or expect delays in the order of your configured TTL (180 seconds, by default) before seeing updates.
+{{< /note >}}
 
 ### Some notes about the above example
 
