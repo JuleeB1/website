@@ -89,9 +89,9 @@ than Google Kubernetes Engine. Proceed at your own risk.
     kubectl label node $NODE_NAME beta.kubernetes.io/fluentd-ds-ready=true
     ```
 
-    **Note:** If a node fails and has to be recreated, you must re-apply the label to
+    {{< note >}}**Note:** If a node fails and has to be recreated, you must re-apply the label to
     the recreated node. To make this easier, you can use Kubelet's command-line parameter
-    for applying node labels in your node startup script.
+    for applying node labels in your node startup script.{{< /note >}}
 
 1. Deploy a `ConfigMap` with the logging agent configuration by running the following command:
 
