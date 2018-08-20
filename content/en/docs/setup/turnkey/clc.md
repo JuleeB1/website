@@ -228,8 +228,8 @@ We use the following to create the Kubernetes cluster:
 * Logging: We offer an integrated centralized logging ELK platform so that all
   Kubernetes and docker logs get sent to the ELK stack. To install the ELK stack
   and configure Kubernetes to send logs to it, follow [the log
-  aggregation documentation](https://github.com/CenturyLinkCloud/adm-kubernetes-on-clc/blob/master/log_aggregration.md). Note: We don't install this by default as
-  the footprint isn't trivial.
+  aggregation documentation](https://github.com/CenturyLinkCloud/adm-kubernetes-on-clc/blob/master/log_aggregration.md). 
+    {{< note >}}**Note:** We don't install this by default as the footprint isn't trivial.{{< /note >}}
 
 ## Cluster management
 
@@ -273,12 +273,9 @@ create a cluster, the script should output URLs for these interfaces like this:
 
 kubernetes-dashboard is running at ```https://${MASTER_IP}:6443/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy```.
 
-Note on Authentication to the UIs: The cluster is set up to use basic
-authentication for the user _admin_.   Hitting the url at
-```https://${MASTER_IP}:6443``` will require accepting the self-signed certificate
-from the apiserver, and then presenting the admin password written to file at:
+{{< note >}}**Note:** The cluster is set up to use basic authentication for the user _admin_. After navigating to the url at ```https://${MASTER_IP}:6443```, you must accept the self-signed certificate from the apiserver, and then provide the admin password written to file at:
 
-```> _${CLC_CLUSTER_HOME}/kube/admin_password.txt_```
+```> _${CLC_CLUSTER_HOME}/kube/admin_password.txt_```{{< /note >}}
 
 
 ### Configuration files
